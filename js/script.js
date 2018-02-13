@@ -1,15 +1,49 @@
-var APPID = "5b249cc904f62fc89ca1e8d767844c39";
+var APPID = "&APPID=5b249cc904f62fc89ca1e8d767844c39";
 var img;
 var townName = document.getElementById("townName");
 var temperature = document.getElementById("temperature");
+var country;
+var miasto;
+var localCity =document.getElementById("city");
 
 
-function updateByZipCode(zip) {
-    var url = "http://api.openweathermap.org/data/2.5/weather?" + "zip=" + zip + ",pl" + "&APPID=" + APPID;
+
+function updateByCity(localCity) { /*Local city*/
+    var url = "http://api.openweathermap.org/data/2.5/weather?q="+ localCity +"&APPID=5b249cc904f62fc89ca1e8d767844c39";
+
+    zapytanie(url);
+}
+/*local city API*/
+function zapytanie(){
+var xhr = new XMLHttpRequest();
+
+xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            var data = JSON.parse(xhr.responseText);
+            var cityy = {};
+            /*weather.townName = data.name;
+            weather.temperature = Math.round(data.main.temp - 273.15);*/
+            cityy.localCity = data.city;
+           /* var cityTest = cityy.localCity;*/
+            
+//            console.log(cityy.localCity);
+            updateE(cityy);
+            
+        }
+    };
+xhr.open("GET", "http://ip-api.com/json/", true);
+xhr.send();
+
+}
+
+/*Looking for city */  
+function updateByZipCode(miasto) {
+    var url = "http://api.openweathermap.org/data/2.5/weather?q="+ miasto +"&APPID=5b249cc904f62fc89ca1e8d767844c39";
 
     sendRequest(url);
 }
 
+/*Looking for city API */  
 function sendRequest(url) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
@@ -18,7 +52,7 @@ function sendRequest(url) {
             var weather = {};
             weather.townName = data.name;
             weather.temperature = Math.round(data.main.temp - 273.15);
-
+            
             update(weather);
         }
     };
@@ -26,11 +60,20 @@ function sendRequest(url) {
     xmlhttp.send();
 }
 
+function updateE(cityy){//test
+    
+        localCity.value = cityy.localCity; //test miasta lokalnego
+        localCity = cityy.localCity;
+        console.log(localCity);
+}
+
 function update(weather) {
     townName.innerHTML = weather.townName;
     temperature.innerHTML = weather.temperature;
-        console.log(weather.temperature);
+
+    console.log(weather.temperature);
     
+    /*color changer */
     function weatherCold(){
     document.getElementById("container").style.backgroundColor = "blue";
     }
@@ -49,10 +92,20 @@ function update(weather) {
         weatherHot();}
 }
 
+
+
+$(document).ready(function() {
+  $('#button').click(function() {
+    var term = $('#city').val();
+      updateByZipCode(term);
+  });
+});
+
+
+
 window.onload = function () {
-
     
-
-    updateByZipCode("41-103");
+    updateByCity();
+//    updateByZipCode(localCity);
 
 }
