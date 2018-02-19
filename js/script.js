@@ -7,6 +7,34 @@ var miasto;
 var localCity =document.getElementById("city");
 
 
+//show acctual date
+function showDate(){
+    let today = new Date();
+    
+    let day = today.getDate();
+    let weekDay = today.getDay(); //0-6 starting from sunday
+    let mounth = today.getMonth() + 1; //0-11 +1
+    let year = today.getFullYear();
+    
+    let weekDayTable = ["Niedziela", "Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota"];
+    
+    if (mounth < 10){ //add 0 b4 mounth number
+        mounth = `0${mounth}`;
+    }
+    for (var i=0; i< weekDayTable.length; i++){
+            if (weekDay == i){
+            var dzien = weekDayTable[i]   
+            }
+    }
+   /* var dzien = weekDayTable[weekDay];*/
+    
+    let all = `${dzien}, ${day} ${mounth} ${year}`;
+    var data = document.getElementById("data");
+    
+    data.innerHTML = all;
+}
+
+showDate();//show date
 
 function updateByCity(localCity) { /*Local city*/
     var url = "http://api.openweathermap.org/data/2.5/weather?q="+ localCity +"&APPID=5b249cc904f62fc89ca1e8d767844c39";
